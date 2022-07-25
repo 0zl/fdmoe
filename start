@@ -1,0 +1,2 @@
+poetry env use python3
+uvicorn main:app --reload --host 0.0.0.0 --port 55192

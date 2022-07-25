@@ -1,0 +1,35 @@
+.from typing import Union
+from fastapi import FastAPI
+from anime_face_detector import create_detector
+
+import urllib
+import numpy as np
+
+waifu_detector = create_detector('yolov3', device='cpu')
+
+def get_image(url):
+	req = urllib.urlopen(url)
+	arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
+	return cv2.imdecode(arr, -1)
+
+def detect_waifu(raw):
+	preds = detector(raw)
+	result = []
+
+	for pr in preds:
+		box = pred['bbox']
+		box, score = box[:4], box[4]
+		result.extend([ box, score ])
+
+	return result
+
+app = FastAPI()
+
+@app.get("/")
+def index():
+	return 'fdmoe'
+
+@app.get("/data")
+def get_data(url: str):
+	raw = get_image(url)
+	return raw
